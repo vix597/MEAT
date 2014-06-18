@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+
+        <script src="/static/js/jquery.min.js"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="/static/js/bootstrap.min.js"></script>
+
+        <script src="/static/js/socket.io.min.js"></script>
+
+        <script src="/static/js/jquery-ui.min.js"></script>
+
+        <script>
+            var socket = io.connect('http://localhost:5000/meat');
+            socket.on('sevent', function(data) {
+                console.log(data);
+            });
+
+            function onWindowResize() {
+                var total = $(window).height();
+                $("#top-window").height(Math.floor(total/2));
+                $("#bottom-window").height(Math.floor(total/2)-1);
+            }
+
+            $(document).ready(function() {
+                $(window).resize(onWindowResize);
+                onWindowResize();
+                $("#add-event-btn").click(function() {
+                    $("#test-event").effect('slide', { direction: 'right' })
+                        .effect('pulsate', { duration: 2000, times: 4 });
+                    return false;
+                });
+            });
+        </script>
+
+        <style>
+            #bottom-window {
+                border-top: 1px solid #aaa;
+                overflow-y: hidden;
+            }
+            .inner {
+                padding-top:10px;
+            }
+            .date {
+                font-family: monospace;
+                font-size: 90%;
+            }
+            li.even {
+                background-color: #f9f9f9;
+            }
+            li.odd {
+                border-top: 1px solid #aaa;
+                border-bottom: 1px solid #aaa;
+            }
+
+            #event-list li {
+                line-height: 2em;
+            }
+            .monospace {
+                font-family: monospace;
+                font-size: 90%;
+            }
+            #test-event {
+                display: none;
+            }
+
+
+        </style>
+        <title>Meat</title>
+    </head>
+
+    <body>
+        <div class='container-fluid'>
+            <div class='row' id='top-window'>
+                <button class='btn btn-primary' id='add-event-btn'>Add Event</button>
+            </div>
+            <div class='row' id='bottom-window'>
+                <ul id='event-list' class='list-unstyled'>
+                    <li class='odd' id='test-event'>
+                        <span class='text-muted date'>
+                            [16:13:25]
+                        </span>
+
+                        <span class='label label-warning'>Misc</span>
+                        Some random message
+                    </li>
+                    <li class='even'>
+                        <span class='text-muted date'>
+                            [14:02:01]
+                        </span>
+
+                        <span class='label label-primary'>Redmine</span>
+                        <a href='#'>Adam Meily</a>
+                        reported issue
+                        <a href='#'>#1568 - Help help does not work</a>
+                    </li>
+                    <li class='odd'>
+                        <span class='text-muted date'>
+                            [12:02:01]
+                        </span>
+
+                        <span class='label label-success'>Gitlab</span>
+                        <a href='#'>Metasponse</a>
+                        build
+                        <a href='#'>#12</a>
+                        <strong class='text-danger'>Failed</strong>
+                    </li>
+                    <li class='even'>
+                        <span class='text-muted date'>
+                            [11:32:01]
+                        </span>
+                        <span class='label label-success'>Gitlab</span>
+                        <a href='#'>Metasponse</a>
+                        commit
+                        <a href='#'>ac8e0ede6248af2f7e5d09747aa0d112b124c806</a>
+                        -
+                        <span class='monospace'>Another commit</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </body>
+
+
+</html>
