@@ -18,10 +18,15 @@
 
         <script src="/static/js/jquery-ui.min.js"></script>
 
+        <script src="/static/js/Meat.js"></script>
+        <script src="/static/js/Redmine.js"></script>
+        <script src="/static/js/EventPanel.js"></script>
+
         <script>
+            var registry;
             var socket = io.connect('http://localhost:5000/meat');
             socket.on('sevent', function(data) {
-                console.log(data);
+                registry.fire(data);
             });
 
             function onWindowResize() {
@@ -33,11 +38,13 @@
             $(document).ready(function() {
                 $(window).resize(onWindowResize);
                 onWindowResize();
-                $("#add-event-btn").click(function() {
-                    $("#test-event").effect('slide', { direction: 'right' })
-                        .effect('pulsate', { duration: 2000, times: 4 });
-                    return false;
-                });
+                
+                registry = new EventRegistry();
+                
+                var panel = new EventPanel({ $root: $("#bottom-window") });
+                var redmine = new RedmineEventHandler({ panel: panel });
+
+                registry.subscribe('redmine', redmine);
             });
         </script>
 
@@ -83,48 +90,6 @@
                 <button class='btn btn-primary' id='add-event-btn'>Add Event</button>
             </div>
             <div class='row' id='bottom-window'>
-                <ul id='event-list' class='list-unstyled'>
-                    <li class='odd' id='test-event'>
-                        <span class='text-muted date'>
-                            [16:13:25]
-                        </span>
-
-                        <span class='label label-warning'>Misc</span>
-                        Some random message
-                    </li>
-                    <li class='even'>
-                        <span class='text-muted date'>
-                            [14:02:01]
-                        </span>
-
-                        <span class='label label-primary'>Redmine</span>
-                        <a href='#'>Adam Meily</a>
-                        reported issue
-                        <a href='#'>#1568 - Help help does not work</a>
-                    </li>
-                    <li class='odd'>
-                        <span class='text-muted date'>
-                            [12:02:01]
-                        </span>
-
-                        <span class='label label-success'>Gitlab</span>
-                        <a href='#'>Metasponse</a>
-                        build
-                        <a href='#'>#12</a>
-                        <strong class='text-danger'>Failed</strong>
-                    </li>
-                    <li class='even'>
-                        <span class='text-muted date'>
-                            [11:32:01]
-                        </span>
-                        <span class='label label-success'>Gitlab</span>
-                        <a href='#'>Metasponse</a>
-                        commit
-                        <a href='#'>ac8e0ede6248af2f7e5d09747aa0d112b124c806</a>
-                        -
-                        <span class='monospace'>Another commit</span>
-                    </li>
-                </ul>
             </div>
         </div>
     </body>
