@@ -3,12 +3,15 @@ from flask import request, render_template
 #from flask.ext.socketio import emit
 from meat import app, socketio
 import json
+import pytz
+from datetime import datetime
+import calendar
+
 
 @app.route('/push', methods=['POST'])
 def push():
-    print "data:", request.data
     obj = json.loads(request.data)
-    print "push:", obj
+    obj['timestamp'] = calendar.timegm(datetime.now(pytz.utc).timetuple()) * 1000
     socketio.emit('sevent', obj, namespace='/meat')
     return '', 200
 
@@ -16,6 +19,7 @@ def push():
 @app.route('/')
 def index():
     return render_template("watch.html")
+
 
 @socketio.on('connect', namespace='/meat')
 def on_connect():

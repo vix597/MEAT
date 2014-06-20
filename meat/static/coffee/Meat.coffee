@@ -1,6 +1,6 @@
 
 
-class @EventRegistry
+class @EventDispatch
 
     constructor: (@opts) ->
         @subscriptions = { children: { }, subs: [ ] }
@@ -14,8 +14,10 @@ class @EventRegistry
             else
                 curr = curr.children[part] = { children: { }, subs: [ ] }
         curr.subs.push(cb)
+        return this
 
     fire: (obj) ->
+        obj.timestamp = moment.utc(obj.timestamp).local()
         parts = obj.id.split('.')
         curr = @subscriptions
         for part in parts
@@ -29,4 +31,6 @@ class @EventRegistry
 
 
 
-
+if typeof String.prototype.startsWith != 'function'
+    String.prototype.startsWith = (str) ->
+        return this.slice(0, str.length) == str;

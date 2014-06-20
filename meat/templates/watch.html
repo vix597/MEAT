@@ -17,16 +17,18 @@
         <script src="/static/js/socket.io.min.js"></script>
 
         <script src="/static/js/jquery-ui.min.js"></script>
+        <script src="/static/js/moment.min.js"></script>
 
         <script src="/static/js/Meat.js"></script>
         <script src="/static/js/Redmine.js"></script>
         <script src="/static/js/EventPanel.js"></script>
+        <script src="/static/js/Gitlab.js"></script>
 
         <script>
-            var registry;
+            var dispatch;
             var socket = io.connect('http://localhost:5000/meat');
             socket.on('sevent', function(data) {
-                registry.fire(data);
+                dispatch.fire(data);
             });
 
             function onWindowResize() {
@@ -39,12 +41,13 @@
                 $(window).resize(onWindowResize);
                 onWindowResize();
                 
-                registry = new EventRegistry();
+                dispatch = new EventDispatch();
                 
-                var panel = new EventPanel({ $root: $("#bottom-window") });
+                var panel = new EventPanel({ $root: $("#bottom-window"), animate: true });
                 var redmine = new RedmineEventHandler({ panel: panel });
+                var gitlab = new GitlabEventHandler({ panel: panel });
 
-                registry.subscribe('redmine', redmine);
+                dispatch.subscribe('redmine', redmine).subscribe('gitlab', gitlab);
             });
         </script>
 
@@ -63,14 +66,14 @@
             li.even {
                 background-color: #f9f9f9;
             }
-            li.odd {
-                border-top: 1px solid #aaa;
+
+
+            .event-list li {
+                line-height: 2em;
                 border-bottom: 1px solid #aaa;
             }
 
-            #event-list li {
-                line-height: 2em;
-            }
+
             .monospace {
                 font-family: monospace;
                 font-size: 90%;
@@ -87,7 +90,7 @@
     <body>
         <div class='container-fluid'>
             <div class='row' id='top-window'>
-                <button class='btn btn-primary' id='add-event-btn'>Add Event</button>
+                
             </div>
             <div class='row' id='bottom-window'>
             </div>
