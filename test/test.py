@@ -1,19 +1,20 @@
-import socket
-import json
-
-message1 = {
-    'id':'redmine.issue.create',
-    'issue_id':1444,
-    'issue_title':'GO FUCK YOUR FACE'
-}
-
-data = json.dumps(message1)
+import urllib, urllib2
 
 try:
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    s.connect(('localhost',5000))
-    s.send(data.encode())
-except Exception as e:
-    print("WaaaHHHH!!!: ",str(e))
+    url_2 = 'http://localhost:5000/meat'
+    values = dict(
+        id='redmine.issue.create',
+        issue_id=1444,
+        issue_title='GO FUCK YOUR FACE'
+    )
+    data = urllib.urlencode(values)
+    req = urllib2.Request(url_2, data)
+    rsp = urllib2.urlopen(req)
+    content = rsp.read()
 
-
+    # print result
+    import re
+    pat = re.compile('Title:.*')
+    print pat.search(content).group()
+except Exception, e:
+    print("FUUUUUUUUU: ",str(e))
