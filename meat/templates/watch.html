@@ -2,10 +2,10 @@
 
 {% block head %}
     {{ super() }}
-    <script src="/static/js/Meat.js"></script>
-    <script src="/static/js/Redmine.js"></script>
-    <script src="/static/js/EventPanel.js"></script>
-    <script src="/static/js/Gitlab.js"></script>
+
+    {% assets "watch-js" %}
+        <script src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
     <script>
         var dispatch;
@@ -25,13 +25,9 @@
             $(window).resize(onWindowResize);
             onWindowResize();
             
-            dispatch = new EventDispatch();
-            
-            var panel = new EventPanel({ $root: $("#bottom-window"), animate: true });
-            var redmine = new RedmineEventHandler({ panel: panel });
-            var gitlab = new GitlabEventHandler({ panel: panel });
-
-            dispatch.subscribe('redmine', redmine).subscribe('gitlab', gitlab);
+            dispatch = new Meat.EventDispatch();
+            Redmine.init({ dispatch: dispatch });
+            var panel = new Meat.EventPanel({ $root: $("#bottom-window"), animate: true, dispatch: dispatch });
         });
     </script> 
     
@@ -47,7 +43,7 @@
             font-family: monospace;
             font-size: 90%;
         }
-        li.even {
+        li.evens {
             background-color: #f9f9f9;
         }
         .event-list li {

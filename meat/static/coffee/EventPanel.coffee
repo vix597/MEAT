@@ -1,14 +1,16 @@
 
 
 
-class @EventPanel
+class EventPanel
 
-    constructor: (@opts) ->
+    constructor: (opts) ->
         @n = 0
         @e = $("<ul class='event-list list-unstyled'>")
-        @opts.$root.append(@e)
+        opts.$root.append(@e)
+        opts.dispatch.subscribe('redmine', this).subscribe('gitlab', this)
+        this.animate = opts.animate || false
 
-    add: ($item, obj) ->
+    handle: (evt) ->
         cls = ''
         if @n == 0
             @n = 1
@@ -17,16 +19,17 @@ class @EventPanel
             @n = 0
             cls = 'odd'
 
-        $item = $("<li>").addClass(cls).append(
-            $("<span class='text-muted datetime'>").text(
-                '[' + obj.timestamp.format('HH:mm:ss') + ']'
+        $li = $("<li>").addClass(cls).append(
+            $("<span class='text-muted datetime monospace'>").text(
+                '[' + evt.timestamp.format('HH:mm:ss') + ']'
             )
-        ).append(' ').append($item).hide()
-        
-        @e.prepend($item)
+        ).append(' ')
+        evt.render($li)
 
-        if @opts.animate
-            $item.effect('slide', { direction: 'right' }).effect('pulsate', { duration: 2000, times: 4 })
+        @e.prepend($li)
+        if @animate
+            $li.effect('slide', { direction: 'right' }).effect('pulsate', { duration: 2000, times: 4 })
         else
-            $item.show();
+            $li.show();
 
+Meat.EventPanel = EventPanel

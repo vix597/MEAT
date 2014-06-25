@@ -2,21 +2,15 @@
 <html lang="en">
     <head>
         {% block head %}
-            <!-- Latest compiled and minified CSS -->
-            <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+            {% assets "application-js" %}
+                <script src="{{ASSET_URL}}"></script>
+            {% endassets %}
 
-            <!-- Optional theme -->
-            <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
-
-            <script src="/static/js/jquery.min.js"></script>
-
-            <!-- Latest compiled and minified JavaScript -->
-            <script src="/static/js/bootstrap.min.js"></script>
-
-            <script src="/static/js/socket.io.min.js"></script>
-            <script src="/static/js/jquery-ui.min.js"></script>
-            <script src="/static/js/moment.min.js"></script>
+            {% assets "application-css" %}
+                <link rel="stylesheet" href="{{ASSET_URL}}">
+            {% endassets %}
         {% endblock %}
+
         {% block pageTitle %}
             <title>MEAT - Monitor Every Awesome Thing</title>
         {% endblock %}
