@@ -1,101 +1,91 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html>
+{% block head %}
+    {{ super() }}
+    <script src="/static/js/Meat.js"></script>
+    <script src="/static/js/Redmine.js"></script>
+    <script src="/static/js/EventPanel.js"></script>
+    <script src="/static/js/Gitlab.js"></script>
 
-    <head>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script>
+        var dispatch;
+        var socket = io.connect('http://localhost:5000/meat');
+        socket.on('sevent', function(data) {
+            console.log("Fire: ",data);
+            dispatch.fire(data);
+        });
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+        function onWindowResize() {
+            var total = $(window).height();
+            $("#top-window").height(Math.floor(total/2));
+            $("#bottom-window").height(Math.floor(total/2)-1);
+        }
 
-        <script src="/static/js/jquery.min.js"></script>
+        $(document).ready(function() {
+            $(window).resize(onWindowResize);
+            onWindowResize();
+            
+            dispatch = new EventDispatch();
+            
+            var panel = new EventPanel({ $root: $("#bottom-window"), animate: true });
+            var redmine = new RedmineEventHandler({ panel: panel });
+            var gitlab = new GitlabEventHandler({ panel: panel });
 
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="/static/js/bootstrap.min.js"></script>
+            dispatch.subscribe('redmine', redmine).subscribe('gitlab', gitlab);
+        });
+    </script> 
+    
+    <style>
+        #bottom-window {
+            border-top: 1px solid #aaa;
+            overflow-y: hidden;
+        }
+        .inner {
+            padding-top:10px;
+        }
+        .date {
+            font-family: monospace;
+            font-size: 90%;
+        }
+        li.even {
+            background-color: #f9f9f9;
+        }
+        .event-list li {
+            line-height: 2em;
+            border-bottom: 1px solid #aaa;
+        }
+        .monospace {
+            font-family: monospace;
+            font-size: 90%;
+        }
+        #test-event {
+            display: none;
+        }
+    </style>   
+{% endblock %}
 
-        <script src="/static/js/socket.io.min.js"></script>
-
-        <script src="/static/js/jquery-ui.min.js"></script>
-        <script src="/static/js/moment.min.js"></script>
-
-        <script src="/static/js/Meat.js"></script>
-        <script src="/static/js/Redmine.js"></script>
-        <script src="/static/js/EventPanel.js"></script>
-        <script src="/static/js/Gitlab.js"></script>
-
-        <script>
-            var dispatch;
-            var socket = io.connect('http://localhost:5000/meat');
-            socket.on('sevent', function(data) {
-                dispatch.fire(data);
-            });
-
-            function onWindowResize() {
-                var total = $(window).height();
-                $("#top-window").height(Math.floor(total/2));
-                $("#bottom-window").height(Math.floor(total/2)-1);
-            }
-
-            $(document).ready(function() {
-                $(window).resize(onWindowResize);
-                onWindowResize();
-                
-                dispatch = new EventDispatch();
-                
-                var panel = new EventPanel({ $root: $("#bottom-window"), animate: true });
-                var redmine = new RedmineEventHandler({ panel: panel });
-                var gitlab = new GitlabEventHandler({ panel: panel });
-
-                dispatch.subscribe('redmine', redmine).subscribe('gitlab', gitlab);
-            });
-        </script>
-
-        <style>
-            #bottom-window {
-                border-top: 1px solid #aaa;
-                overflow-y: hidden;
-            }
-            .inner {
-                padding-top:10px;
-            }
-            .date {
-                font-family: monospace;
-                font-size: 90%;
-            }
-            li.even {
-                background-color: #f9f9f9;
-            }
-
-
-            .event-list li {
-                line-height: 2em;
-                border-bottom: 1px solid #aaa;
-            }
-
-
-            .monospace {
-                font-family: monospace;
-                font-size: 90%;
-            }
-            #test-event {
-                display: none;
-            }
-
-
-        </style>
-        <title>Meat</title>
-    </head>
-
-    <body>
-        <div class='container-fluid'>
-            <div class='row' id='top-window'>
-                
-            </div>
-            <div class='row' id='bottom-window'>
-            </div>
+{% block pageTitle %}
+    {{ super() }}
+{% endblock %}
+    
+{% block navbar %}
+    {{ super() }}
+    <!--Filter goes here, this is just a placeholder. Probably change tits-->
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right" role="form">
+                <div class="form-group">
+                    <input type="text" placeholder="Filter" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Filter</button>
+            </form>
         </div>
-    </body>
+    </div>
+{% endblock %}
 
-
-</html>
+{% block containerFluid %}
+    <div class='row' id='top-window'>
+    </div>
+    <div class='row' id='bottom-window'>
+    </div>
+{% endblock %}

@@ -10,6 +10,7 @@ import calendar
 
 @app.route('/push', methods=['POST'])
 def push():
+    print("PUSH!!!")
     obj = json.loads(request.data)
     obj['timestamp'] = calendar.timegm(datetime.now(pytz.utc).timetuple()) * 1000
     socketio.emit('sevent', obj, namespace='/meat')
@@ -33,3 +34,7 @@ def index():
 @socketio.on('connect', namespace='/meat')
 def on_connect():
     print "CONNECTION!!!!"
+
+@socketio.on('message', namespace='/meat')
+def handle_messae(message):
+    print "MESSAGE: "+str(message)
