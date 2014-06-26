@@ -16,7 +16,7 @@ def push():
     socketio.emit('sevent', obj, namespace='/meat')
     return '', 200
 
-@app.route('/push/gitlab', methods=['POST'])
+@app.route('/push.gitlab', methods=['POST'])
 def push_gitlab():
     obj = json.loads(request.data)
     obj['timestamp'] = calendar.timegm(datetime.now(pytz.utc).timetuple()) * 1000

@@ -27,7 +27,7 @@ class IssueEvent extends Event
         if 'status' of obj
             @status = obj.status
         if 'assigned_to' of obj
-            @assigned_to = new Redmine.User(obj.assigned_to)
+            @assigned_to = if obj.assigned_to then new Redmine.User(obj.assigned_to) else null
         if 'tracker' of obj
             @tracker = obj.tracker
 
@@ -62,6 +62,27 @@ class IssueEvent extends Event
             ).append(" commented on issue ").append(
                 @issue.render()
             )
+        else if @id == 'redmine.issue.status'
+            $e.append("Issue ").append(@issue.render()).append(
+                " updated by "
+            ).append(
+                @author.render()
+            ).append(": ")
+
+            fields = 0
+            if @assigned_to != undefined
+                fields += 1
+                $e.append(
+                    "assigned to "
+                ).append(
+                    if @assigned_to then @assigned_to.render() else $("<em>Nobody</em>")
+                ).append(' ')
+            if @status
+                fields += 1
+                $e.append(
+                    $("<span class='label label-default'>").text(@status)
+                )
+
         return $e
 
 Redmine.Event = Event

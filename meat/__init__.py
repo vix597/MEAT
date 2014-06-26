@@ -11,6 +11,8 @@ app.static_dir = 'static'
 socketio = SocketIO(app)
 assets = Environment(app)
 
+assets.debug = True
+
 
 app_css = Bundle(
     "css/bootstrap.min.css",
@@ -35,6 +37,8 @@ watch_js = Bundle(
     "coffee/meat.coffee",
     "coffee/redmine/models.coffee",
     "coffee/redmine/events.coffee",
+    "coffee/gitlab/models.coffee",
+    "coffee/gitlab/events.coffee",
     "coffee/EventPanel.coffee",
     filters=['coffeescript'], #rjsmin
     output='gen/js/watch.js'

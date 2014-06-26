@@ -27,6 +27,7 @@
             
             dispatch = new Meat.EventDispatch();
             Redmine.init({ dispatch: dispatch });
+            Gitlab.init({ dispatch: dispatch });
             var panel = new Meat.EventPanel({ $root: $("#bottom-window"), animate: true, dispatch: dispatch });
         });
     </script> 
