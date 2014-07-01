@@ -9,6 +9,8 @@ class Event
     this.create = (obj) ->
         if obj.id.startsWith("redmine.issue")
             return new IssueEvent(obj)
+        else if obj.id == "redmine.project.status"
+            return new ProjectStatusEvent(obj)
         return new Event(obj)
 
     render: ($e) ->
@@ -84,6 +86,16 @@ class IssueEvent extends Event
                 )
 
         return $e
+
+
+class ProjectStatusEvent extends Event
+    constructor: (obj) ->
+        super(obj)
+        @issues = obj.issues
+        @versions = [ ]
+        for version in obj.versions
+            @versions.push(new Redmine.Version(version))
+
 
 Redmine.Event = Event
 Redmine.init = (opts) ->

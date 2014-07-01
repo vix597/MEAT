@@ -39,7 +39,13 @@ class Issue
             "##{@id} - #{@title}"
         )
 
+class Version
+    constructor: (obj) ->
+        @name = obj.name
+        @due = moment.utc(obj.due).local()
+
 
 Redmine.Issue = Issue
 Redmine.User = User
 Redmine.Project = Project
+Redmine.Version = Version

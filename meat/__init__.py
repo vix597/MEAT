@@ -37,9 +37,11 @@ watch_js = Bundle(
     "coffee/meat.coffee",
     "coffee/redmine/models.coffee",
     "coffee/redmine/events.coffee",
+    "coffee/redmine/status.coffee",
     "coffee/gitlab/models.coffee",
     "coffee/gitlab/events.coffee",
     "coffee/EventPanel.coffee",
+    "coffee/SummaryPanel.coffee",
     filters=['coffeescript'], #rjsmin
     output='gen/js/watch.js'
 )

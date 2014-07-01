@@ -1,5 +1,31 @@
 #!/bin/bash
 
+
+echo '{
+    "id": "redmine.project.status",
+    "project": {
+        "name": "MEAT",
+        "identifier": "meat",
+        "url": "https://redmine/meat"
+    },
+    "issues": {
+        "open": 128,
+        "trackers": {
+            "Bug": 64,
+            "Feature": 60,
+            "Support": 4
+        }
+    },
+    "versions": [
+        {
+            "name": "1.0",
+            "due": 1404432000000
+        }
+    ]
+}' | http POST http://localhost:5000/push
+
+sleep 2
+
 echo '{
     "id": "redmine.issue.create",
     "author": {

@@ -31,9 +31,14 @@ class EventDispatch
     fire: (obj) ->
         obj.timestamp = moment.utc(obj.timestamp).local()
         parts = obj.id.split('.')
-        curr = @subscriptions
 
         evt = @createEvent(parts[0], obj)
+
+        if not (parts[0] of @subscriptions.children)
+            return
+
+        #curr = @subscriptions.children[parts[0]]
+        curr = @subscriptions
         for part in parts
             for cb in curr.subs
                 cb.handle(evt)
@@ -42,6 +47,9 @@ class EventDispatch
                 curr = curr.children[part]
             else
                 return
+
+        for cb in curr.subs
+            cb.handle(evt)
 
 Meat.EventDispatch = EventDispatch
 

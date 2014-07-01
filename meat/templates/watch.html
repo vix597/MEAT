@@ -28,13 +28,20 @@
             dispatch = new Meat.EventDispatch();
             Redmine.init({ dispatch: dispatch });
             Gitlab.init({ dispatch: dispatch });
+            
+            var summary = new Meat.SummaryPanel({ $root: $("#top-window") });
             var panel = new Meat.EventPanel({ $root: $("#bottom-window"), animate: true, dispatch: dispatch });
+
+            summary.addPanel(new Redmine.ProjectStatusPanel({ dispatch: dispatch }));
         });
     </script> 
     
     <style>
         #bottom-window {
             border-top: 1px solid #aaa;
+            overflow-y: hidden;
+        }
+        #top-window {
             overflow-y: hidden;
         }
         .inner {
@@ -68,6 +75,7 @@
 {% block navbar %}
     {{ super() }}
     <!--Filter goes here, this is just a placeholder. Probably change tits-->
+    <!--
     <div class="container">
         <div class="navbar-collapse collapse">
             <form class="navbar-form navbar-right" role="form">
@@ -78,6 +86,7 @@
             </form>
         </div>
     </div>
+-->
 {% endblock %}
 
 {% block containerFluid %}
