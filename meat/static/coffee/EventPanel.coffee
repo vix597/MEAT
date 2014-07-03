@@ -7,7 +7,7 @@ class EventPanel
         @n = 0
         @e = $("<ul class='event-list list-unstyled'>")
         opts.$root.append(@e)
-        opts.dispatch.subscribe('redmine', this).subscribe('gitlab', this)
+        opts.dispatch.subscribe('redmine.issue', this).subscribe('gitlab', this)
         this.animate = opts.animate || false
 
     handle: (evt) ->

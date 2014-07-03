@@ -14,7 +14,16 @@ echo '{
             "Bug": 64,
             "Feature": 60,
             "Support": 4
-        }
+        },
+        "categories": [
+            {
+                "name": "API",
+                "trackers": {
+                    "Bug": 10,
+                    "Feature": 5
+                }
+            }
+        ]
     },
     "versions": [
         {
@@ -22,6 +31,47 @@ echo '{
             "due": 1404432000000
         }
     ]
+}' | http POST http://localhost:5000/push
+
+echo '{
+    "id": "redmine.project.status",
+    "project": {
+        "name": "Rare",
+        "identifier": "rare",
+        "url": "https://redmine/rare"
+    },
+    "issues": {
+        "open": 391,
+        "trackers": {
+            "Bug": 21,
+            "Feature": 370,
+            "Support": 0
+        },
+        "categories": [
+            {
+                "name": "Docs",
+                "trackers": {
+                    "Bug": 0,
+                    "Feature": 5
+                }
+            },
+            {
+                "name": "UI",
+                "trackers": {
+                    "Bug": 23,
+                    "Feature": 51
+                }
+            },
+            {
+                "name": "Logging",
+                "trackers": {
+                    "Bug": 1,
+                    "Feature": 2
+                }
+            }
+        ]
+    },
+    "versions": [ ]
 }' | http POST http://localhost:5000/push
 
 sleep 2

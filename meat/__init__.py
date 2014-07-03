@@ -47,5 +47,12 @@ watch_js = Bundle(
 )
 assets.register("watch-js", watch_js)
 
+watch_css = Bundle(
+    "css/watch.css",
+    filters='cssmin',
+    output='gen/css/watch.js'
+)
+assets.register('watch-css', watch_css)
+
 from meat import views
 

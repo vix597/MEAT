@@ -1,4 +1,7 @@
 
+@Redmine = { }
+@Gitlab = { }
+
 
 class @EventDispatch
 
@@ -19,7 +22,11 @@ class @EventDispatch
     fire: (obj) ->
         obj.timestamp = moment.utc(obj.timestamp).local()
         parts = obj.id.split('.')
-        curr = @subscriptions
+        
+        if parts[0] not of @subscriptions
+            return
+
+        curr = @subscriptions[parts[0]]
         for part in parts
             for cb in curr.subs
                 cb.handle(obj)

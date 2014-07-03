@@ -7,6 +7,10 @@
         <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
+    {% assets "watch-css" %}
+        <link rel='stylesheet' type='text/css' href="{{ ASSET_URL }}">
+    {% endassets %}
+
     <script>
         var dispatch;
         var socket = io.connect('http://localhost:5000/meat');
